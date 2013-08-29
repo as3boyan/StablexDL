@@ -1,5 +1,6 @@
 package ru.stablex.sxdl;
 
+import com.asliceofcrazypie.flash.TilesheetStage3D;
 import flash.display.Graphics;
 import openfl.display.Tilesheet;
 import flash.Lib;
@@ -36,6 +37,8 @@ class SxStage extends SxObject{
     public var stageWidth : Int;
     //by default = Lib.current.stage.stageHeight. This affects only flash with `notransform` flag
     public var stageHeight : Int;
+	
+	static public var stage3Dinit:Bool;
 
     #if (flash && !notransform)
         public var vtx : Vector<Float>;
@@ -71,6 +74,7 @@ class SxStage extends SxObject{
     */
     public function new () : Void {
         super();
+		
         this.tileData        = [];
         this.displayList     = [];
         this.displayListSize = 0;
@@ -113,17 +117,21 @@ class SxStage extends SxObject{
             this.deque.push(true);
         #end
 
+		#if flash11
+			TilesheetStage3D.clearGraphic(gr);
+		#end
+		
         gr.clear();
-        #if flash
-            #if notransform
-            this.tilesheet.drawTiles(gr, this.tileData, this);
-            #else
-            this.tilesheet.drawTiles(gr, this.tileData, this.vtx, this.idx, this.uv, this.smooth);
-            #end
-        #else
+        //#if flash
+            //#if notransform
+            //this.tilesheet.drawTiles(gr, this.tileData, this);
+            //#else
+            //this.tilesheet.drawTiles(gr, this.tileData, this.vtx, this.idx, this.uv, this.smooth);
+            //#end
+        //#else
             this.tilesheet.drawTiles(gr, this.tileData, this.smooth, Tilesheet.TILE_ALPHA #if !notransform | Tilesheet.TILE_TRANS_2x2 #end);
 			
-        #end
+        //#end
 
     }//function render()
 
